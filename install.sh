@@ -15,9 +15,9 @@ echo "------------->"
 echo "-------------->"
 echo "---------------------------->"
 
+sudo chmod +x install.sh
 sudo apt-get update
 sudo apt-get install freeglut3-dev
-sudo chmod +x install.sh
 
 echo "<----------------------------"
 
