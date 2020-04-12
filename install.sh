@@ -1,4 +1,4 @@
-echo "---------------------------->"
+#!/bin/bash
 echo "Starting to install Glut Packages"
 echo "->"
 echo "-->"
