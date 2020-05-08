@@ -16,10 +16,15 @@ echo "------------->"
 echo "-------------->"
 echo "---------------------------->"
 
-sudo chmod +x install.sh
+#Update permission to run shell scripts in exe mode.
+sudo chmod +x runme.sh
+
+#Update all Ubuntu-Bionic Updates.
 sudo apt-get update
-sudo apt-get install freeglut3-dev
+
+#Install all required dependencies listed on requirements.txt
+sudo apt-get install $(cat requirements.txt)
 
 echo "<----------------------------"
 
-echo "Installation complete. OpenGL ready to use."
+echo "Installation complete. OpenGL and associated libraries are ready to use."
