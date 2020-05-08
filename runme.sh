@@ -1,11 +1,9 @@
 #!/bin/bash
-# Run this file to start playing tic-tac-toe. Command to run this is $ ./runme.sh
-
-sudo apt-get update
-#update permission to run the program in exec mode.
-sudo chmod +x ./runme.sh
+#Run this file to start playing tic-tac-toe. Command to run this is $ ./runme.sh
 
 #link the program file tictactoe.cpp to the OpenGL libraries
-g++ tictactoe.cpp -lGl -lGLU -lglut 
+#The cmd line will produce an executable file called as tictactoe in the current dir,
+#Without -o the resulting execultablf file will be as a.out
+g++ tictactoe.cpp -o tictactoe -lGL -lGLU -lglut
 
-./a.out
+./tictactoe
