@@ -1,4 +1,5 @@
 #!/bin/bash
+#Run this file for installing all the required dependencies. $ ./install.sh <- cmd to run.
 echo "Starting to install Glut Packages"
 echo "->"
 echo "-->"
