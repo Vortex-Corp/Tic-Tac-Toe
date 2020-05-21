@@ -13,7 +13,7 @@ Any queries please mail to i.mnshreevatsa@gmail.com
   $ ls -a  
   
 4.Install all the dependencies by running install.sh shell script. But by default shell scripts do not have a exec permission, update permissions.    
-This will auto-update the OS , updates exec permission for runme.sh also installs all the dependencies listed requirements.txt    
+This will auto-update the OS , updates exec permission for runme.sh also installs all the dependencies listed in requirements.txt    
   $ sudo chmod +x install.sh  
 
 5.Run the above install.sh file.  
