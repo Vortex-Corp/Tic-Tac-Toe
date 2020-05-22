@@ -1,3 +1,4 @@
+//This code is contibuted by Shreevatsa N and Yellappa Kumar.
 #include <GL/glut.h>
 #include <iostream>
 #include <math.h>
@@ -188,58 +189,84 @@ int blocking_win()
  }
  if ((board[0][1] + board[1][1] + board[2][1]) == 2)
  {
- if (board[0][1] == 0) board[0][1] = 2;
- else if (board[1][1] == 0) board[1][1] = 2;
- else if (board[2][1] == 0) board[2][1] = 2;
- return(1);
+ 	if (board[0][1] == 0) board[0][1] = 2;
+ 	else if (board[1][1] == 0) board[1][1] = 2;
+ 	else if (board[2][1] == 0) board[2][1] = 2;
+ 	return(1);
  }
  else if ((board[0][0] + board[1][0] + board[2][0]) == 2)
  {
- if (board[0][0] == 0) board[0][0] = 2;
- else if (board[1][0] == 0) board[1][0] = 2;
- else if (board[2][0] == 0) board[2][0] = 2;
- return(1);
+ 	if (board[0][0] == 0) board[0][0] = 2;
+	else if (board[1][0] == 0) board[1][0] = 2;
+ 	else if (board[2][0] == 0) board[2][0] = 2;
+ 	return(1);
  }
  else if ((board[0][2] + board[1][2] + board[2][2]) == 2)
  {
- if (board[0][2] == 0) board[0][2] = 2;
- else if (board[1][2] == 0) board[1][2] = 2;
- else if (board[2][2] == 0) board[2][2] = 2;
- return(1);
+ 	if (board[0][2] == 0) board[0][2] = 2;
+ 	else if (board[1][2] == 0) board[1][2] = 2;
+ 	else if (board[2][2] == 0) board[2][2] = 2;
+ 	return(1);
  }
  else if ((board[0][0] + board[1][1] + board[2][2]) == 2)
  {
- if (board[0][0] == 0) board[0][0] = 2;
- else if (board[1][1] == 0) board[1][1] = 2;
- else if (board[2][2] == 0) board[2][2] = 2;
- return(1);
+ 	if (board[0][0] == 0) board[0][0] = 2;
+	else if (board[1][1] == 0) board[1][1] = 2;
+ 	else if (board[2][2] == 0) board[2][2] = 2;
+ 	return(1);
  } 
  else if ((board[0][2] + board[1][1] + board[2][0]) == 2)
  {
- if (board[0][2] == 0) board[0][2] = 2;
- else if (board[1][1] == 0) board[1][1] = 2; 
- else if (board[2][0] == 0) board[2][0] = 2;
- return(1);
+ 	if (board[0][2] == 0) board[0][2] = 2;
+ 	else if (board[1][1] == 0) board[1][1] = 2; 
+ 	else if (board[2][0] == 0) board[2][0] = 2;
+ 	return(1);
  }
- if (board[1][1] == 0){ board[1][1] = 2; return 1;}
+ if (board[1][1] == 0){ 
+	 board[1][1] = 2; return 1;
+ }
 
  return(0);
  }
 int check_corner(void)
 { 
- if (board[0][0]==0){ board[0][0]=2; return(1); }
- else if(board[0][2]==0){ board[0][2]=2; return(1);}
- else if(board[2][0]==0){ board[2][0]=2; return(1);}
- else if(board[2][2]==0){ board[2][2]=2; return(1);}
+ if (board[0][0]==0){ 
+	 board[0][0]=2; 
+	 return(1); 
+ }
+ else if(board[0][2]==0){ 
+	 board[0][2]=2; 
+	 return(1);
+ }
+ else if(board[2][0]==0){
+	 board[2][0]=2;
+	 return(1);
+ }
+ else if(board[2][2]==0){
+	 board[2][2]=2;
+	 return(1);
+ }
 
  return(0);
  }
 int check_row(void)
 {
- if(board[0][1] == 0){ board[0][1]=2; return(1);}
- else if(board[1][0] == 0){ board[1][0]=2; return(1);}
- else if(board[1][2] == 0){ board[1][2]=2; return(1);}
- else if(board[2][1] == 0){ board[2][1]=2; return(1);}
+ if(board[0][1] == 0){ 
+	 board[0][1]=2; 
+	 return(1);
+ }
+ else if(board[1][0] == 0){
+	 board[1][0]=2;
+	 return(1);
+ }
+ else if(board[1][2] == 0){ 
+	 board[1][2]=2;
+	 return(1);
+ }
+ else if(board[2][1] == 0){ 
+	 board[2][1]=2;
+	 return(1);
+ }
 
  return(0);
 }
@@ -423,7 +450,6 @@ int main(int argc, char **argv)
 	glutCreateWindow("Tic Tac Toe");
 	glutReshapeFunc(Reshape);
 	glutDisplayFunc(Display); 
-	
 	glutKeyboardFunc(OnKeyPress);
 	glutMouseFunc(OnMouseClick);
 	glutIdleFunc(Display);
