@@ -4,12 +4,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <unistd.h>
 
 int board[3][3];	// board for gameplay
-int turn;			// current move
-int result;			// Result of the game
-bool over;			// Is the game Over?
-
+int turn;		// current move
+int result;		// Result of the game
+bool over;		// Is the game Over?
+int comp = 0;		// for computer
+int mainmenu=1;		// main menu 
 /*
 	Sets the board for Tic Tac Toe
 */
@@ -29,9 +31,25 @@ void OnKeyPress(unsigned char key,int x,int y)
 {
 	switch(key)
 	{
+		case 'p':   
+			mainmenu = 0;
+			over=false;
+			Intialize();
+			glutPostRedisplay();
+			
+		break;
+		case 'c':
+			mainmenu = 0;
+			over=false;
+			glutPostRedisplay();
+			comp = 1;
+			Intialize();
+			
+		break;		
 		case 'y':
 		if(over==true)
 		{
+			mainmenu = 1;
 			over=false;
 			Intialize();
 		}
@@ -46,7 +64,6 @@ void OnKeyPress(unsigned char key,int x,int y)
 			exit(0);
 	}
 }
-
 /*
 	Called when Mouse is clicked 
 */
@@ -59,6 +76,9 @@ void OnMouseClick(int button,int state,int x,int y)
 			if(board[(y-50)/100][x/100]==0)
 			{
 				board[(y-50)/100][x/100]=1;
+				if(comp == 1) 
+				turn = -1;
+				else 
 				turn=2;
 			}
 		}
@@ -143,11 +163,85 @@ void DrawXO()
 			}
 			else if(board[i][j]==2)
 			{
-				
 				DrawCircle(50 + j*100 , 100 + i*100 , 25 , 15);
 			}
 		}
 	}
+}
+
+
+int blocking_win()
+{
+ int i, t;
+ for( i = 0; i < 3; i++)
+ {
+	t = 0;
+	t = board[i][0] + board[i][1] + board[i][2];
+	if (t == 2)
+	{
+	// Find empty
+	if (board[i][0] == 0) board[i][0] = 2;
+	else if (board[i][1] == 0) board[i][1] = 2;
+	else if (board[i][2] == 0) board[i][2] = 2;
+	return 1;
+	}
+ }
+ if ((board[0][1] + board[1][1] + board[2][1]) == 2)
+ {
+ if (board[0][1] == 0) board[0][1] = 2;
+ else if (board[1][1] == 0) board[1][1] = 2;
+ else if (board[2][1] == 0) board[2][1] = 2;
+ return(1);
+ }
+ else if ((board[0][0] + board[1][0] + board[2][0]) == 2)
+ {
+ if (board[0][0] == 0) board[0][0] = 2;
+ else if (board[1][0] == 0) board[1][0] = 2;
+ else if (board[2][0] == 0) board[2][0] = 2;
+ return(1);
+ }
+ else if ((board[0][2] + board[1][2] + board[2][2]) == 2)
+ {
+ if (board[0][2] == 0) board[0][2] = 2;
+ else if (board[1][2] == 0) board[1][2] = 2;
+ else if (board[2][2] == 0) board[2][2] = 2;
+ return(1);
+ }
+ else if ((board[0][0] + board[1][1] + board[2][2]) == 2)
+ {
+ if (board[0][0] == 0) board[0][0] = 2;
+ else if (board[1][1] == 0) board[1][1] = 2;
+ else if (board[2][2] == 0) board[2][2] = 2;
+ return(1);
+ } 
+ else if ((board[0][2] + board[1][1] + board[2][0]) == 2)
+ {
+ if (board[0][2] == 0) board[0][2] = 2;
+ else if (board[1][1] == 0) board[1][1] = 2; 
+ else if (board[2][0] == 0) board[2][0] = 2;
+ return(1);
+ }
+ if (board[1][1] == 0){ board[1][1] = 2; return 1;}
+
+ return(0);
+ }
+int check_corner(void)
+{ 
+ if (board[0][0]==0){ board[0][0]=2; return(1); }
+ else if(board[0][2]==0){ board[0][2]=2; return(1);}
+ else if(board[2][0]==0){ board[2][0]=2; return(1);}
+ else if(board[2][2]==0){ board[2][2]=2; return(1);}
+
+ return(0);
+ }
+int check_row(void)
+{
+ if(board[0][1] == 0){ board[0][1]=2; return(1);}
+ else if(board[1][0] == 0){ board[1][0]=2; return(1);}
+ else if(board[1][2] == 0){ board[1][2]=2; return(1);}
+ else if(board[2][1] == 0){ board[2][1]=2; return(1);}
+
+ return(0);
 }
 
 /*
@@ -210,35 +304,77 @@ bool CheckIfDraw()
 	}
 	return true;	
 }
+int computer()
+{
+if(!CheckWinner())
+{
+if(turn == -1){
+if (blocking_win() == 1) turn = 1; 
+else if ( check_corner() == 1) turn = 1; 
+else if ( check_row() == 1) turn = 1;
+return 1;	 
+}
+}
+return 0;
+}
 
 /*
 	Function to display up everything
 */
-void Display()
-{
+void Display(){
+	if(mainmenu == 1)
+		{
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0, 1, 1, 1);
+		glColor3f(0, 0, 1);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Tic Tac Toe", 80, 80);
+		glColor3f(1, 0, 1);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Two player press - P", 60, 130);
+		glColor3f(1, 0, 1);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "To play vs AI press - C", 60, 180);
+		glutSwapBuffers();	
+		}
+	  	
+	if(mainmenu == 0)
+	{
+	
 	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(1, 1, 1, 1);
-	glColor3f(0, 0, 0);
-	if(turn == 1)
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Player1's turn", 100, 30);	
-	else
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Player2's turn", 100, 30);	
+	glClearColor(0, 1, 1, 1);
+	glColor3f(0, 0, 1);
+	if(turn == 1){
+		if(comp == 1) usleep(1000000);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Player 1's turn", 100, 30);
+}
+	else if(turn == 2)
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Player 2's turn", 100, 30);
+	else if(turn == -1){	
+		DrawString(GLUT_BITMAP_HELVETICA_18, "computer's turn", 100, 30);
+		
+		}
 	
 	DrawLines();
 	DrawXO();
+	if(computer()) turn = 1;
+	
 	
 	if(CheckWinner() == true)
 	{
-		if(turn == 1)
+		if(turn == 1 && comp == 1)
 		{
 			over = true;
-			result = 2;
+			result = 3;
 		}
-		else
+		else if(turn == 2 || turn == -1)
 		{
 			over = true;
 			result = 1; 
 		}
+		else if(turn == 1 )
+		{
+			over = true;
+			result = 2; 
+		}
+
 	}
 	else if(CheckIfDraw() == true)
 	{
@@ -247,6 +383,7 @@ void Display()
 	}
 	if(over == true)
 	{
+		glColor3f(0, 0, 1);
 		DrawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 100, 160);
 		if(result == 0)
 			DrawString(GLUT_BITMAP_HELVETICA_18, "It's a draw", 110, 185);
@@ -254,11 +391,14 @@ void Display()
 			DrawString(GLUT_BITMAP_HELVETICA_18, "Player1 wins", 95, 185);
 		if(result == 2)
 			DrawString(GLUT_BITMAP_HELVETICA_18, "Player2 wins", 95, 185);
+		if(result == 3)
+			DrawString(GLUT_BITMAP_HELVETICA_18, "computer wins", 95, 185);
 		DrawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 40, 210);
 	}
+	
 	glutSwapBuffers();
 }
-
+}
 /*
 	Function to reshape
 */
@@ -270,7 +410,6 @@ void Reshape(int x, int y)
 	glOrtho(0, x, y, 0, 0, 1);
 	glMatrixMode(GL_MODELVIEW);
 }
-
 /*
 	Driver Function
 */
@@ -283,13 +422,11 @@ int main(int argc, char **argv)
 	glutInitWindowSize(300,350);
 	glutCreateWindow("Tic Tac Toe");
 	glutReshapeFunc(Reshape);
-	glutDisplayFunc(Display);
+	glutDisplayFunc(Display); 
+	
 	glutKeyboardFunc(OnKeyPress);
 	glutMouseFunc(OnMouseClick);
 	glutIdleFunc(Display);
-    glutMainLoop();
+	glutMainLoop();
     return 0;
 }
-
-
-
