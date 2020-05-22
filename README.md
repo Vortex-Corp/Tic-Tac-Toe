@@ -1,5 +1,5 @@
 # Tic-Tac-Toe
-A simple C++ 2 player Tic Tac Toe game made using the graphic utility OpenGL programming, by @vatsa287 and @yallappa-s.   
+A simple C++ 2 player Tic Tac Toe game made using the graphic utility OpenGL programming, by @vatsa287 and @yellappa-s.   
 Any queries please mail to i.mnshreevatsa@gmail.com or yallappakumar4@gmail.com
 
 # Instructions to install and play Tic-Tac-Toe
