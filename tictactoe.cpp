@@ -1,4 +1,4 @@
-//This code is contibuted by Shreevatsa N and Yellappa Kumar.
+//This code is contibuted by Shreevatsa N and Yellappa S.
 #include <GL/glut.h>
 #include <iostream>
 #include <math.h>
@@ -10,9 +10,11 @@
 int board[3][3];	// board for gameplay
 int turn;		// current move
 int result;		// Result of the game
-bool over;		// Is the game Over?
-int comp = 0;		// for computer
-int mainmenu=1;		// main menu 
+bool over = false;	// Is the game Over?
+int comp;		// for computer
+int mainmenu=0;		// main menu 
+char p1[10],p2[10];
+int i = 0, j = 0, k = 0;
 /*
 	Sets the board for Tic Tac Toe
 */
@@ -24,76 +26,8 @@ void Intialize()
 		for(int j=0;j<3;j++)
 			board[i][j]=0;
 	}
+	i = 0;j = 0;k = 0;
 }
-/*
-	Called when any key from keyboard is pressed
-*/
-void OnKeyPress(unsigned char key,int x,int y)
-{
-	switch(key)
-	{
-		case 'p':   
-			mainmenu = 0;
-			over=false;
-			Intialize();
-			glutPostRedisplay();
-			
-		break;
-		case 'c':
-			mainmenu = 0;
-			over=false;
-			glutPostRedisplay();
-			comp = 1;
-			Intialize();
-			
-		break;		
-		case 'y':
-		if(over==true)
-		{
-			mainmenu = 1;
-			over=false;
-			Intialize();
-		}
-		break;
-		case 'n':
-		if(over==true)
-		{
-			exit(0);
-		}
-		break;
-		default:
-			exit(0);
-	}
-}
-/*
-	Called when Mouse is clicked 
-*/
-void OnMouseClick(int button,int state,int x,int y)	
-{
-	if(over==false && button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
-	{
-		if(turn==1)
-		{
-			if(board[(y-50)/100][x/100]==0)
-			{
-				board[(y-50)/100][x/100]=1;
-				if(comp == 1) 
-				turn = -1;
-				else 
-				turn=2;
-			}
-		}
-		else if(turn==2)
-		{
-			if(board[(y-50)/100][x/100]==0)
-			{
-				board[(y-50)/100][x/100]=2;
-				turn=1;
-			}
-		}
-	}	
-}
-
 /*
 	Utility function to draw string 	
 */
@@ -106,6 +40,89 @@ void DrawString(void *font,const char s[],float x,float y)
 		glutBitmapCharacter(font,s[i]);
 	}
 }
+/*
+	Called when any key from keyboard is pressed
+*/
+void OnKeyPress(unsigned char key,int x,int y)
+{
+	if(mainmenu == 1)
+	{
+		if(k == 0 && key != 13) p1[i++] = key;
+		else if(key == 13 && k == 0) k = 1;
+		else if(k == 1 && key != 13) p2[j++] = key;
+		else if(key == 13 && k == 1) mainmenu = 3;
+	}
+	else if(mainmenu == 2)
+	{
+		if(key != 13) p1[k++] = key;
+		else mainmenu = 3;
+	}
+	else {
+	switch(key)
+	{
+		case 'p':   
+			mainmenu = 1;
+			over=false;
+			comp = 0;
+			Intialize();
+			glutPostRedisplay();
+			
+		break;
+		case 'c':
+			mainmenu = 2;
+			over=false;
+			glutPostRedisplay();
+			comp = 1;
+			Intialize();
+			
+		break;		
+		case 'y':
+		if(over==true)
+		{
+			mainmenu = 0;
+			over=false;
+			Intialize();
+		}
+		break;
+		case 'n':
+		if(over==true)
+		{
+			exit(0);
+		}
+		break;
+		default: exit(0);	
+	}
+}
+}
+/*
+	Called when Mouse is clicked 
+*/
+void OnMouseClick(int button,int state,int x,int y)	
+{
+	if(over==false && button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
+	{
+		if(turn==1)
+		{
+			if(board[(y-50)/200][x/200]==0)
+			{
+				board[(y-50)/200][x/200]=1;
+				if(comp == 1) 
+				turn = -1;
+				else 
+				turn=2;
+			}
+		}
+		else if(turn==2)
+		{
+			if(board[(y-50)/200][x/200]==0)
+			{
+				board[(y-50)/200][x/200]=2;
+				turn=1;
+			}
+		}
+	}	
+}
+
 
 /*
 	Function to draw up the horizontal and vertical lines
@@ -115,15 +132,15 @@ void DrawLines()
 	glBegin(GL_LINES);
 	glColor3f(0,0,0);
 	
-	glVertex2f(100,50);
-	glVertex2f(100,340);
-	glVertex2f(200,340);
 	glVertex2f(200,50);
+	glVertex2f(200,640);
+	glVertex2f(400,640);
+	glVertex2f(400,50);
 	
-	glVertex2f(0,150);
-	glVertex2f(300,150);
 	glVertex2f(0,250);
-	glVertex2f(300,250);
+	glVertex2f(600,250);
+	glVertex2f(0,450);
+	glVertex2f(600,450);
 	
 	glEnd();		
 }
@@ -156,15 +173,15 @@ void DrawXO()
 			if(board[i][j]==1)
 			{
 				glBegin(GL_LINES);
-				glVertex2f(50 + j * 100 - 25, 100 + i * 100 - 25);
-				glVertex2f(50 + j * 100 + 25, 100 + i * 100 + 25);
-				glVertex2f(50 + j * 100 - 25, 100 + i * 100 + 25);
-				glVertex2f(50 + j * 100 + 25, 100 + i * 100 - 25);
+				glVertex2f(50 + j * 200 - 25, 100 + i * 200 - 25);
+				glVertex2f(150 + j * 200 + 25, 200 + i * 200 + 25);
+				glVertex2f(50 + j * 200 - 25, 200 + i * 200 + 25);
+				glVertex2f(150 + j * 200 + 25, 100 + i * 200 - 25);
 				glEnd();
 			}
 			else if(board[i][j]==2)
 			{
-				DrawCircle(50 + j*100 , 100 + i*100 , 25 , 15);
+				DrawCircle(100 + j*200 , 150 + i*200 , 60 , 50);
 			}
 		}
 	}
@@ -349,38 +366,65 @@ return 0;
 	Function to display up everything
 */
 void Display(){
+	if(mainmenu == 0)
+		{
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(1, 1, 0, 1);
+		glColor3f(1, 0, 0);
+		DrawString(GLUT_BITMAP_TIMES_ROMAN_24, "Tic Tac Toe", 220, 180);
+		glColor3f(0, 0, 1);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Two player press - P", 180, 230);
+		glColor3f(0, 0, 1);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "To play vs AI press - C", 180, 280);
+		glutSwapBuffers();	
+		}
+	
 	if(mainmenu == 1)
 		{
 		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0, 1, 1, 1);
-		glColor3f(0, 0, 1);
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Tic Tac Toe", 80, 80);
-		glColor3f(1, 0, 1);
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Two player press - P", 60, 130);
-		glColor3f(1, 0, 1);
-		DrawString(GLUT_BITMAP_HELVETICA_18, "To play vs AI press - C", 60, 180);
+		glClearColor(.7, 0.2, .9, 0);
+		glColor3f(0, 0, 0);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Enter player 1 name: ", 60, 230);
+		glColor3f(0, 1, 1);
+		DrawString(GLUT_BITMAP_HELVETICA_18, p1, 260, 230);
+		glColor3f(0, 0, 0);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Enter player 2 name: ", 60, 280);
+		glColor3f(0, 1, 1);
+		DrawString(GLUT_BITMAP_HELVETICA_18, p2, 260, 280);
 		glutSwapBuffers();	
 		}
-	  	
-	if(mainmenu == 0)
+	  
+	if(mainmenu == 2)
+		{
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.5, 0.2, 0.9, 0);
+		glColor3f(0, 0, 0);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Enter player name: ", 60, 230);
+		glColor3f(0, 1, 1);
+		DrawString(GLUT_BITMAP_HELVETICA_18, p1, 260, 230);
+		glutSwapBuffers();	
+		}
+	if(mainmenu == 3)
 	{
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0, 1, 1, 1);
 	glColor3f(0, 0, 1);
+	if(!over){
 	if(turn == 1){
-		if(comp == 1) usleep(1000000);
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Player 1's turn", 100, 30);
+		if(comp == 1) usleep(700000);
+		DrawString(GLUT_BITMAP_HELVETICA_18, p1, 250, 30);
 }
 	else if(turn == 2)
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Player 2's turn", 100, 30);
+		DrawString(GLUT_BITMAP_HELVETICA_18, p2, 250, 30);
 	else if(turn == -1){	
-		DrawString(GLUT_BITMAP_HELVETICA_18, "computer's turn", 100, 30);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "computer", 250, 30);
 		
 		}
 	
 	DrawLines();
 	DrawXO();
+	}
 	if(computer()) turn = 1;
 	
 	
@@ -388,16 +432,19 @@ void Display(){
 	{
 		if(turn == 1 && comp == 1)
 		{
+			usleep(800000);
 			over = true;
 			result = 3;
 		}
 		else if(turn == 2 || turn == -1)
 		{
+			usleep(800000);			
 			over = true;
 			result = 1; 
 		}
 		else if(turn == 1 )
 		{
+			usleep(800000);
 			over = true;
 			result = 2; 
 		}
@@ -405,22 +452,26 @@ void Display(){
 	}
 	else if(CheckIfDraw() == true)
 	{
+		usleep(800000);
 		over = true;
 		result = 0;
 	}
 	if(over == true)
-	{
+	{	
 		glColor3f(0, 0, 1);
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 100, 160);
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 250, 160);
 		if(result == 0)
-			DrawString(GLUT_BITMAP_HELVETICA_18, "It's a draw", 110, 185);
+			DrawString(GLUT_BITMAP_HELVETICA_18, "It's a draw", 250, 235);
+		else {
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Winner: ", 250, 235);		
 		if(result == 1)
-			DrawString(GLUT_BITMAP_HELVETICA_18, "Player1 wins", 95, 185);
+			DrawString(GLUT_BITMAP_HELVETICA_18, p1, 320, 235);
 		if(result == 2)
-			DrawString(GLUT_BITMAP_HELVETICA_18, "Player2 wins", 95, 185);
+			DrawString(GLUT_BITMAP_HELVETICA_18, p2, 320, 235);
 		if(result == 3)
-			DrawString(GLUT_BITMAP_HELVETICA_18, "computer wins", 95, 185);
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 40, 210);
+			DrawString(GLUT_BITMAP_HELVETICA_18, "computer ", 320, 235);
+		}
+		DrawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 190, 310);
 	}
 	
 	glutSwapBuffers();
@@ -446,7 +497,7 @@ int main(int argc, char **argv)
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE);
 	glutInitWindowPosition(550,200);
-	glutInitWindowSize(300,350);
+	glutInitWindowSize(600,650);
 	glutCreateWindow("Tic Tac Toe");
 	glutReshapeFunc(Reshape);
 	glutDisplayFunc(Display); 
