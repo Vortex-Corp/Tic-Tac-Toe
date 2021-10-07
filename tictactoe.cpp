@@ -187,7 +187,9 @@ void DrawXO()
 	}
 }
 
-
+/*
+	Function to block wins in corner cases check
+*/
 int blocking_win()
 {
  int i, t;
